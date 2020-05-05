@@ -1,0 +1,855 @@
+---
+title: "R_Introduction"
+author: "Pei-Cheng LI (H24074085)"
+date: "2020/3/12"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    theme: readable
+    highlight: tango
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Basic Operation
+### Type
+#### class: distinguish the type is character, numeric, integer, complex or logical(TRUE or FALSE)
+```{r}
+class("Hi")
+class(2.5)
+class(as.integer(2))
+class(4+3i)
+class(T)  # TRUE = T; FALSES = F
+```
+#### as.integer(x): let the x's type become integer
+```{r}
+as.integer(TRUE)        # logical 'TRUE' becomes integer
+as.integer(FALSE)       # logical 'FALSE' becomes integer
+class(as.integer("Hi")) # can not be a character
+```
+
+#### is.integer(x): is x integer?
+```{r}
+is.integer("Hi")
+is.integer(as.integer(FALSE))
+```
+
+### Arithmetic 
+#### Addition: +
+```{r}
+4 + 7
+```
+#### Subtraction: -
+```{r}
+4 - 7
+```
+#### Multiplication: *
+```{r}
+4 * 7
+```
+#### Division: /
+```{r}
+4 / 7
+```
+
+#### Power: ^ or **
+```{r}
+4 ^ 7    # 4 to the power of 7
+4 ** 7   # 4 to the power of 7
+```
+#### Root: sqrt(x)
+```{r}
+sqrt(4)  # the square root of 4
+```
+#### Quotient: %/%
+```{r}
+4 %/% 7  # the quotient of 4 divided by 7
+```
+#### Remainder: %%
+```{r}
+4 %% 7   # the remainder of 4 divided by 7
+```
+#### sign(x): distinguish x is positive(recall 1), negative(recall -1) or zero(recall 0)
+```{r}
+sign(12)
+sign(0)
+sign(-12)
+```
+
+#### abs(x): take the absolute value of x
+```{r}
+abs(12)
+abs(0)
+abs(-12)
+```
+
+#### log(x): take the logarithm of x
+```{r}
+log(2)     # the logarithm with base e 
+log1p(1)   # log(x) = log1p(x-1)
+log(2, 10) # the logarithm with base 10
+log10(2)   # the logarithm with base 10
+```
+
+#### exp(x): $e^x$
+```{r}
+exp(5)   
+expm1(5) # expm1(x) = exp(x) - 1
+```
+
+#### ceiling(x): round up to an integer
+```{r}
+ceiling(2.43)
+ceiling(3.5)
+```
+
+#### floor(x): round down to an integer
+```{r}
+floor(2.43)
+floor(3.5)
+```
+
+#### trunc(x): extract the integer part
+```{r}
+trunc(2.43)
+trunc(3.5)
+```
+
+#### round(x, digits = n): round x to the nearst nth
+```{r}
+round(123.456789)
+round(2.43549812, digits = 3)
+round(6457, digits = -2)
+```
+
+#### signif(x, digits = n): round x to the nearst (n-1)th
+```{r}
+signif(123.456789)
+signif(2.43549812, digits = 3)
+signif(6457, digits = 2)
+```
+
+#### Trigonometric Functions
+```{r}
+sin(0) # sine
+cos(0) # cosine
+tan(0) # tangent
+```
+
+#### Inverse Trigonometric Function
+```{r}
+asin(0) # arc-sine
+acos(1) # arc-cosine
+atan(0) # arc-tangent
+```
+
+#### Hyperbolic Trigonometric Function
+```{r}
+sinh(0) # hyperbolic sine 
+cosh(0) # hyperbolic cosine
+tanh(0) # hyperbolic tangent
+```
+
+#### Hyperbolic Inverse Trigonometric Function
+```{r}
+asinh(0) # hyperbolic arc-sine
+acosh(1) # hyperbolic arc-cosine
+atanh(0) # hyperbolic arc-tangent
+```
+
+## Variable and Data
+### Variable
+#### using <- to appoint the variable object
+```{r}
+A <- 5       # can be appoint as any types
+a <- 8
+A * a        # capital letter(A) and small letter(a) are different
+A <- a <- 4  # A = a = 4
+A - a
+objects()    # show all objects in workspace (= ls())
+rm(a)        # delete the object
+exists("a")  # check whether the object exists 
+```
+
+#### NA(missing value), NULL(no meaning), Inf(infinite), NaN(not a number)
+```{r}
+is.na(c(0/0, NA))  # is NA?
+is.nan(c(0/0, NA)) # is NaN?
+length(NULL)       # the length of NULL is 0
+Inf - Inf + 10     # the answer is 10?
+NaN + Inf          # the answer is Inf?
+NA + Inf           # the answer is Inf?
+NaN + NA           # the answer is NaN?
+```
+
+### Vector
+#### using c(...) to create a vector, the elements in same vector will become same type(character > complex > numeric > integer > logical)
+```{r}
+c('YA', TRUE, 5+6i)  # will become character
+c(3+4i, FALSE, 2.7)  # will become complex
+```
+
+#### get the elements from vectors
+```{r}
+a <- c(red = 3, blue = 4, black = 5, yellow = 6)
+a[1]        # get the factor's all information
+a[[1]]      # get the factor's value
+a['blue']   # get the factor's all information
+a[['blue']] # get the factor's value
+a[1:4]      # get many facotrs' information in one time 
+```
+
+#### x:y the number from x to y
+```{r}
+1:10
+2:8
+```
+
+#### seq(s, e, by): the number from x to y 
+```{r}
+seq(1, 10)
+seq(1, 10, 2)               # by = increment of sequence
+seq(1, 10, length.out = 5)  # length.out = desired length of the sequence
+```
+
+#### rep(x, times, each): repeat x
+```{r}
+rep(8, 3)
+rep(c('A','a'), 2)            # compare with next one
+rep(c('A','a'), each = 2)     # the order is different
+rep(c(2,4), c(3,5))
+rep(seq(2, 10, 2), 2)         # compare with next one
+rep(seq(2, 10, 2), rep(2, 5)) # the order is different
+```
+
+#### length(x): calculate how many elements in vector x
+```{r}
+length(c(1, 2, 3))
+```
+
+#### sum(x): the sum of all elements in vector x
+```{r}
+sum(c(1, 2, 3))
+```
+
+#### prod(x): the product of all elements in vector x
+```{r}
+prod(c(1, 2, 3))
+```
+
+
+#### cumsum(x): return the vector from the accumulated elements
+```{r}
+cumsum(c(1, 2, 3))
+```
+
+#### sort(x): return the sorted vector
+```{r}
+sort(c(3, 2, 1))
+sort(c(1, 2 ,3), decreasing = TRUE)
+```
+
+#### order(x): return the sorted index vector
+```{r}
+order(c(6, 5, 4))
+order(c(4, 6, 5), decreasing = TRUE)
+```
+
+#### rank(x):return the sorted index vector
+```{r}
+rank(c(6, 5, 4))
+```
+
+
+#### plus, subtraction, multiplication and division: the vectors need to be a multiple relationship
+```{r}
+c(2, 4) + c(1, 3, 5)
+c(2, 4) - c(1, 3, 5, 7)
+c(2, 4) * c(1, 3, 5)
+c(2, 4) / c(1, 3, 5, 7)
+```
+### Array
+#### array(x, c(a, b)): using x to make an array by a x b
+```{r}
+array(c(1, 0), c(2, 3))
+```
+
+#### rbind(x, y):  using rows merge into an array
+```{r}
+rbind(c(1, 2), c(3, 4))
+```
+
+#### cbind(x, y): using columns merge into an array
+```{r}
+cbind(c(1, 2), c(3, 4))
+```
+
+#### get the elements
+```{r}
+a <- rbind(c(5, 4, 3), c(2, 5, 0))
+a
+a[1,]     # get first row
+a[,1]     # get first column
+a[1, 1:2] # get the elements from first to second colums of  first row
+```
+
+#### plus, subtraction, multiplication and division: arrays need to have same size
+```{r}
+a + a
+b <- rbind(c(1, 2), c(3, 4))
+a - a*2
+b * b # multiply corresponding array elements
+b / b # divide corresponding array elements
+```
+
+#### length(x): count how many elements in an array
+```{r}
+length(a)
+```
+
+#### dim(x): the dimension of an array
+```{r}
+dim(a)
+```
+
+#### ncol(x) or nrow(x): count how many column or row in an array
+```{r}
+ncol(a)
+nrow(a)
+```
+
+#### aperm(x): get the x's transporse
+```{r}
+aperm(a)
+```
+
+### Matrix
+#### matrix(x, nrow = a, ncol = b): create a matrix
+```{r}
+matrix(c(1:4), nrow = 2, ncol = 2)               # fill in data according to column
+matrix(c(1:4), nrow = 2, ncol = 2, byrow = TRUE) # fill in data according to row
+```
+
+#### get elements in the same way as array
+```{r}
+a <- rbind(c(5, 4, 3), c(2, 5, 0))
+a
+a[1,]     # get first row
+a[,1]     # get first column
+a[1, 1:2] # get the elements from first to second colums of  first row
+```
+
+#### t(x): transpose matrix
+```{r}
+t(a)
+```
+
+#### %*%: matrix multiplication
+```{r}
+a %*% t(a)
+```
+
+#### diag: generate a diagona motrix, or return the diagonal vector of the matrix
+```{r}
+b <- diag(c(rep(1, 3))) # generate a diagona matrix
+b
+diag(b)                 # return the diagonal vector of the matrix
+```
+
+#### det: calculate the determinant of a matrix, the matrix must be a symmetric matrix
+```{r}
+det(b)
+```
+
+#### solve: return the inverse of the matrix which is suitable for solving linear equations
+```{r}
+A <- rbind(c(1, 2), c(8, 7))
+solve(A)    # solve x from Ax = b, A: A, b: Identity matrix
+b <- rbind(c(1, 1), c(1, 1))
+solve(A, b) # solve x from Ax = b, A: A, b: b
+```
+
+#### eigen: calculate the eigenvetor and eigenvalue
+```{r}
+eigen(A)
+```
+
+#### rownames: modify or check the row names
+```{r}
+rownames(A)
+rownames(A) <- c('row1', 'row2')
+rownames(A)
+```
+
+#### colnames: modify or check the column names
+```{r}
+colnames(A)
+colnames(A) <- c('col1', 'col2')
+colnames(A)
+```
+
+### Factor
+#### like a vector after grading
+```{r}
+x <- c(5, 2, 0, 5, 2, 0)
+factor(x)
+factor(x, ordered = TRUE)                 # order factors
+factor(x, labels = c("I", "Love", "You")) # name of level
+factor(x, exclude = 5)                    # exclude something
+```
+
+#### get elements
+```{r}
+x[1] 
+x[[1]] # same with using x[1]
+x[1:3]
+x[c(1, 4)]
+```
+
+#### as.factor: let variable become to factor
+```{r}
+as.factor(x)
+```
+
+#### is.factor: whether the variable is factor
+```{r}
+is.factor(x)
+is.factor(as.factor(x))
+```
+
+#### is.ordered: whether the factor is ordered
+```{r}
+is.ordered(factor(x, ordered = TRUE))
+is.ordered(factor(x, ordered = FALSE))
+```
+
+#### as.ordered: order factor
+```{r}
+as.ordered(factor(x))
+```
+
+#### which: find the eligible elements
+```{r}
+which(x == 5)
+```
+
+### List
+#### be able to contain data with different data attributes
+```{r}
+x <- list(a = "Hi", b = FALSE, c = 46, d = c(8, 5))
+x
+```
+
+#### get elements
+```{r}
+x$a
+x[1]
+x[[4]]
+x[[4]][1]
+
+```
+
+#### as.list: create list
+```{r}
+as.list(c("Bye", "88"))
+```
+
+#### is.list: whether it is list
+```{r}
+is.list(x)
+```
+
+#### attributes/names: see all the names of elements
+```{r}
+attributes(x)
+names(x)
+```
+
+### Dataframe
+#### like a data sheet
+```{r}
+name <- c("J", "Q", "K")
+height <- c(7, 9, 3)
+weight <- c(4, 2, 8)
+x <- data.frame(name, height, weight)
+x
+```
+
+#### get elements
+```{r}
+x[2, ]
+x[, 2]
+x[2, 2]
+x[, "name"]
+x$name
+```
+
+#### head：get the top six data of the data frame (default is 6)
+```{r}
+head(x)     # because of not enough data, all are displayed
+head(x, 1L) # only first column is displayed
+```
+
+#### names：modify or check the column names
+```{r}
+names(x)
+names(x) <- c("n", "h", "w")
+names(x)
+```
+
+#### colnames：set the column names
+```{r}
+colnames(x)
+```
+
+#### row.names：modify or check the row names
+```{r}
+row.names(x)
+row.names(x) <- c("r1", "r2", "r3")
+row.names(x) 
+```
+
+#### rownames：set the row names
+```{r}
+rownames(x)
+```
+
+#### summary：basic information of the data
+```{r}
+summary(x)
+```
+
+## Input and Output Data
+### Input Data
+```{r}
+# read.table(file = "XXX.txt") 
+# read.csv(file = "XXX.csv") 
+```
+
+### Output Data
+```{r}
+# write.table(data, file = "XXX.txt")
+# write.csv(data, file = "XXX.csv")
+```
+
+### Change and Find Directory
+```{r}
+# setwd("directory") # change
+# getwd()            # find
+```
+
+### Save and Load the Objets
+```{r}
+# source("XXX.R")                 # retrieve the objets in a future session
+# save.image("XXX.RData")         # save all objets in the current workspace
+# save(a,b,c, file = "XXX.RData") # save parts of objets
+# oad("XXX.Rdata")                # retrieve data
+```
+
+### R Package
+```{r}
+# install.packages("XXX") # download a package
+# library(XXX)            # call the package
+```
+
+## Process Control
+### Logical Judgment
+#### >, <, >=, <=, ==, != those are commen
+```{r}
+1 %in% c(1, 3)  # A %in% B: A in B?
+x <- c(1, 3, 5) 
+x > 0 && x == 0 # intersction: logical judgement to single value
+x > 0 & x == 0  # intersction: logical judgement to vactor
+x > 0 || x == 0 # union: logical judgement to single value
+x > 0 | x == 0 # union: logical judgement to single value
+```
+
+### Conditional Execution
+#### if, else if,  else
+```{r}
+x <- 2
+if(x > 0){
+  print("positive")
+}else if(x < 0){
+  print("negative")
+}else{
+  print("zero")
+}
+```
+
+#### ifelse
+```{r}
+a <- ifelse(x/2 == 0, "even", "odd") # ifelse(statement, TRUE = "even", FALSE = "odd")
+a
+```
+
+#### switch
+```{r}
+switch(3, "dog", "cat", "pig")                # switch(return value represents the number of program segments, program segment1, program segment2, ...)
+switch("liebe", ich = 5, liebe = 2, dich = 0) # switch(return the name of the program segment , name1 = program segment, name2 = program segment, ...)
+```
+
+### Loop Structure
+#### for
+```{r}
+for(x in c(1:3)){
+  print(x^2)
+}
+```
+
+#### while: if the statement is true, it will repeat
+```{r}
+x <- -1
+while(x <= 0){
+  print(x)
+  x <- x+1  # it's important, or it'll become an infinite loop
+}
+```
+
+#### repeat
+#### break: out of the loop
+#### next: skip this time's loop and do next time's
+```{r}
+x <- -5
+repeat{
+  if(x > 0){
+    break
+  }else if(x == 0){
+    x <- x + 10
+    next
+  }
+  x <- x + 1
+  print(x)
+}
+x
+```
+
+## Define Function
+### Define Function
+#### using function(parameter){repeated execution of the program}
+```{r}
+times <- function(x, y){
+  x^y
+}
+times(2, 10)
+times(10, 2)
+```
+
+## Statistical Application
+### Distribution
+#### Binomial Distribution
+$$ X \sim Bin(x,\ n,\ p)$$
+$$ P(X=x) = (^{n}_{x})p^{x}(1-p)^{1-x},\ \ x=0, ..., n$$
+```{r}
+dbinom(10, 10, 0.5)   # dbinom(x, size, prob): the density corresponding to x
+pbinom(4, 10, 0.5)    # pbinom(x, size, prob): cumulative probability corresponding to x
+qbinom(0.52, 10, 0.5) # qbinom(p, size, prob): quantile corresponding to probability p
+rbinom(10, 10, 0.5)   # rbinom(n, size, prob): generate n random numbers of binomial distribution
+```
+
+#### Poisson Distribution
+$$ X \sim Poi(\lambda)$$
+$$ P(X=x) = \frac{\lambda^{x}e^{-\lambda}}{x!},\ \ x=0, 1, 2, ...$$
+```{r}
+dpois(10, 10)  # dpois(x, lambda): the density corresponding to x
+ppois(8, 10)   # ppois(x, lambda): cumulative probability corresponding to x
+qpois(0.1, 10) # qpois(p, lambda): quantile corresponding to probability p
+rpois(10, 10)  # rpois(n, lambda): generate n random numbers of poisson distribution
+```
+
+#### Continuous Uniform Distribution
+$$ X \sim U(a,\ b)$$
+$$ f(x) = \frac{1}{b-a}, \ \ a \leq x \leq b$$
+```{r}
+dunif(3, 0, 4)   # dunif(x, min, max): the density corresponding to x
+punif(3, 0, 4)   # punif(x, min, max): cumulative probability corresponding to x
+qunif(0.5, 0, 4) # qunif(p, min, max): quantile corresponding to probability p
+runif(8, 0, 4)   # runif(n, min, max): generate n random numbers of uniform distribution
+```
+
+#### Gamma Distribution
+$$ X \sim \Gamma(\alpha,\ \beta)$$
+$$ f(x) = \frac{x^{\alpha-1}e^{{-x}/\beta}}{\Gamma(\alpha)\beta^{\alpha}}, \ \ x > 0$$
+```{r}
+dgamma(2, 5, 8)   # dgamma(x, shape, scale): the density corresponding to x
+pgamma(2, 5, 8)   # pgamma(x, shape, scale): cumulative probability corresponding to x
+qgamma(0.2, 5, 8) # qgamma(p, shape, scale): quantile corresponding to probability p
+rgamma(2, 5, 8)   # rgamma(n, shape, scale): generate n random numbers of gamma distribution
+```
+
+#### Exponential Distribution
+$$ X \sim Exp(\lambda)$$
+$$ f(x) = \lambda e^{-x\lambda}, \ \ when \ x \geq 0$$
+```{r}
+dexp(6, 0.5)   # dexp(x, lambda): the density corresponding to x
+pexp(6, 0.5)   # pexp(x, lambda): cumulative probability corresponding to x
+qexp(0.6, 0.5) # qexp(p, lambda): quantile corresponding to probability p
+rexp(6, 0.5)   # rexp(n, lambda): generate n random numbers of exponential distributjion
+```
+
+#### Chi-squared Distribution
+$$ X \sim \chi^{2}(k)$$
+$$ f(x) = \frac{x^{p/2-1}e^{{-x}/2}}{\Gamma(p/2)2^{p/2}}, \ \ x > 0$$
+```{r}
+dchisq(5, 4)   # dchisq(x, df): the density corresponding to x
+pchisq(5, 4)   # pchisq(x, df): cumulative probability corresponding to x
+qchisq(0.5, 4) # qchisq(p, df): quantile corresponding to probability p
+rchisq(5, 4)   # rchisq(n, df): generate n random numbers of chi-square distribution
+```
+
+#### Normal Distribution
+$$ X \sim N(\mu,\ \sigma^{2}) $$
+$$ f(x) = \frac{1}{\sigma \sqrt{2\pi}}e^{-\frac{(x-\mu)^{2}}{2\sigma^{2}}}, \ \ -\infty < x < \infty  $$
+```{r}
+dnorm(0.05, 0, 1) # dnorm(x, mean, sd): the density corresponding to x
+pnorm(0.05, 0, 1) # pnorm(x, mean, sd): cumulative probability corresponding to x
+qnorm(0.05, 0, 1) # qnorm(x, mean, sd): quantile corresponding to probability p
+rnorm(9, 0, 1)    # rnorm(x, mean, sd): generate n random numbers of normal distribution
+```
+
+#### Student t Distributioni
+$$ X \sim t(r)$$
+$$ f(x) = \frac{\Gamma[(r+1)/2]}{ \sqrt{\pi r}\Gamma(r/2)}\frac{1}{(1+x^2/r)^{(r+1)/2}}, \ \ -\infty < x < \infty $$
+```{r}
+dt(5, 2)   # dt(x, df): the density corresponding to x
+pt(5, 2)   # pt(x, df): cumulative probability corresponding to x
+qt(0.1, 2) # qt(p, df): quantile corresponding to probability p
+rt(5, 2)   # rt(n, df): generate n random numbers of t distribution
+```
+
+#### F Distribution
+$$ X \sim F(r_1,\ r_2)$$
+$$ f(x) = \frac{\Gamma[(r_1+r_2)/2](r_1/r_2)^{r_1/2}}{\Gamma(r_1/2)\Gamma(r_2/2)}\frac{x^{r_1/2-1}}{(1+r_1x/r_2)^{(r_1+r_2)/2}}, \ \ -\infty < x < \infty  $$
+```{r}
+df(4, 2, 6)   # df(x, df1, df2): the density corresponding to x
+pf(4, 2, 6)   # pf(x, df1, df2): cumulative probability corresponding to x
+qf(0.4, 2, 6) # qf(p, df1, df2): quantile corresponding to probability p
+rf(4, 2, 6)   # rf(n, df1, df2): generate n random numbers of F distribution
+```
+
+### Draw
+#### histogram, boxplot, density plot
+```{r}
+x <- rnorm(100, 0, 1)
+hist(x)
+boxplot(x)
+plot(density(x))
+```
+
+#### barchart, piechart
+```{r}
+x <- sample(c(1, 8), 10, replace = TRUE)
+barplot(x) # for discrete variable
+pie(x)     # for discrete variable
+```
+
+#### pairs
+```{r}
+a <- matrix(rnorm(30), 10, 3) # use matrix
+pairs(a) 
+```
+
+#### plot
+```{r}
+x <- rnorm(100)
+y <- 4*x + rnorm(100, 0, 1)
+plot(x, y, main = "plot",      # main = title
+     xlim = NULL, ylim = NULL, # range of an axis
+     xlab = "x", ylab = "y",   # name of an axis
+     col = "blue",             # col = color
+     pch = 0                   # pch = symbol for points
+     )
+```
+
+#### plot(..., type = ...)
+```{r}
+par(mfrow = c(2, 3)) # split plot ranges
+plot(x, y, type = "p", main = "p")
+plot(x, y, type = "l", main = "l")
+plot(x, y, type = "b", main = "b")
+plot(x, y, type = "o", main = "o")
+plot(x, y, type = "h", main = "h")
+plot(x, y, type = "n", main = "n")
+```
+
+#### plot(..., pch = ..., cex = ...)
+```{r}
+par(mfrow = c(2,3)) # split plot ranges 
+plot(x, y, pch = 1, main = "pch = 1") 
+plot(x, y, pch = 3, main = "pch = 3", cex.main = 2)   # cex.main = the size of the title
+plot(x, y, pch = 10, main = "pch = 10", cex.axis = 2) # cex.axis = the size of the axis
+plot(x, y, pch = 15, main = "pch = 15", cex = 2, cex.main = 2) 
+plot(x, y, pch = 19, main = "pch = 19", cex = 2, cex.axis = 2) 
+plot(x, y, pch = "#", main = "pch = #", cex = 2, cex.axis = 2, cex.lab = 2, cex.main = 2)
+```
+
+#### plot(..., type = “l”, lty =..., lwd = ...)
+```{r}
+t <- 1:20 
+y <- rnorm(20)
+par(mfrow = c(2,3)) # split plot ranges 
+plot(t, y, type = "l") 
+plot(t, y, type = "l", lty = 2)          # lty = the style of a line
+plot(t, y, type = "l", lty = 2, lwd = 2) # lwd = the width of a line
+plot(t, y, type = "l", lty = 3, lwd = 2) 
+plot(t, y, type = "l", lty = 4, lwd = 2) 
+plot(t, y, type = "l", lty = 5, lwd = 2)
+```
+
+#### plot(..., bty = ...)
+```{r}
+t <- 1:20 
+y <- rnorm(20)
+par(mfrow = c(2,3)) # split plot ranges 
+plot(t, y, type = "l", bty = "o", main = "bty = \" o \"") # the box around the plot
+plot(t, y, type = "l", bty = "n", main = "bty = \" n \"") 
+plot(t, y, type = "l", bty = "7", main = "bty = \" 7 \"") 
+plot(t, y, type = "l", bty = "L", main = "bty = \" L \"") 
+plot(t, y, type = "l", bty = "C", main = "bty = \" C \"") 
+plot(t, y, type = "l", bty = "U", main = "bty = \" U \"")
+```
+
+#### plot(..., col = ...)
+```{r}
+t <- 1:20 
+y <- rnorm(20)
+par(mfrow = c(2,3)) # split plot ranges 
+plot(t, y, type = "l", col = 1) 
+plot(t, y, type = "l", col = 2) 
+plot(t, y, type = "l", col = "green") 
+plot(t, y, type = "l", col = "grey") 
+plot(t, y, type = "l", col = "#009999") 
+plot(t, y, type = "l", col = "#0000FF")
+```
+
+#### curve(expression, from = ..., to = ...)
+```{r}
+par(mfrow = c(2, 3)) 
+curve(exp(-x), 0, 10) 
+curve(dnorm(x), -10, 10) 
+curve(x^2, -10, 10) 
+curve(sin, 0, 10) 
+curve(3*exp(-3*x), 0, 6) 
+curve(5*x+2, 0, 10)
+```
+
+#### add points or lines or text to an existing plot
+```{r}
+x <- rnorm(50) 
+y <- 3*x + rnorm(50, 0, 1) 
+y1 <- 5*x + rnorm(50, 0, 2)
+
+plot(x, y, type = "p", pch = 19) 
+abline(a = 0, b = 3)
+
+points(x, y1, col = 4, pch = 20) 
+abline(a = 0, b = 5, col = 4)
+
+text(-1.5, 2, "A", cex = 3) 
+text(1, -5, "B", cex = 3, col = 2) 
+legend("topleft", c("Y", "Y1"), col = c(1,4), lty = c(1, 1), cex = 1)
+```
